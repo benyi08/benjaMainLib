@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Donor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
