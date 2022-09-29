@@ -10,12 +10,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Donor {
+public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    private Integer userId;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
@@ -24,5 +24,9 @@ public class Donor {
     private String password;
 
     @Column(nullable = false)
-    private String role;
+    private Role role;
+
+    public enum Role {
+        LIBRARIAN, CUSTOMER
+    }
 }
