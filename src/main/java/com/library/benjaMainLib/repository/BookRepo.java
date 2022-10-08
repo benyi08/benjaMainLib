@@ -1,2 +1,4 @@
-package com.library.benjaMainLib.repository;public class BookRepo {
+package com.library.benjaMainLib.repository;
+
+public interface BookRepo {
 }

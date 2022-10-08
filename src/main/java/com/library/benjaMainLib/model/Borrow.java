@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@Entity//annotation that makes this class be able to communicate with the sql database via jpa
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
