@@ -24,12 +24,12 @@ public class Book {
     private String author;
 
     @Column(nullable = false)
-    private Date releaseDate;
+    private String releasedate;//no upper cases
 
     @Column(nullable = false)
-    private int pages;
+    private String pages;
 
     @Column(nullable = false)
-    private boolean isBorrowed;
+    private String isborrowed;//no upper cases
 
 }

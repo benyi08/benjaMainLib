@@ -22,9 +22,9 @@ public class Borrow {
     private String name;
 
     @Column(nullable = false)
-    private Date startDate;
+    private String borrowdate;
 
-    @Column(nullable = false)
-    private Date duration;
+    //@Column(nullable = false)
+    //private String duration;
 
 }

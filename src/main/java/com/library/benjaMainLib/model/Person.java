@@ -25,9 +25,5 @@ public class Person {
     private String password;
 
     @Column(nullable = false)
-    private Role role;
-
-    public enum Role {
-        LIBRARIAN, CUSTOMER
-    }
+    private String role;
 }
