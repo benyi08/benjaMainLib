@@ -1,5 +1,6 @@
 package com.library.benjaMainLib.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,20 +12,21 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "borrow")
 public class Borrow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BORROW_ID", updatable = false)
+    @Column(updatable = false)
     private Integer id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String borrowdate;
+    private String title;
 
-    //@Column(nullable = false)
-    //private String duration;
+    @Column(nullable = false)
+    private Date borrowdate;
 
 }

@@ -6,31 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/book")
-public class BookController {
+import java.util.Optional;
 
-    @Autowired
-    BookService bookService;
+public interface BookController {
 
-    @GetMapping("")
-    public Iterable<Book> getBookList(){
-        return bookService.getAllBooks();
-    }
+    public Iterable<Book> getBookList();
 
-    @PostMapping("/create")
-    public ResponseEntity<Book> registerBook(@RequestBody Book book){
-        return bookService.createBook(book);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteBook(@PathVariable Integer id){
-        return bookService.deleteBook(id);
-    }
-
-    @DeleteMapping("/deleteshow/{id}")
-    public ResponseEntity<Book> deleteAndShow(@PathVariable Integer id){
-        return bookService.deleteAndShow(id);
-    }
-
+    public Optional<Book> getBookById(@PathVariable Integer id);
 }

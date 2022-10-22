@@ -1,7 +1,6 @@
 package com.library.benjaMainLib.repository;
 
 import com.library.benjaMainLib.model.Borrow;
-import com.library.benjaMainLib.model.Person;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
