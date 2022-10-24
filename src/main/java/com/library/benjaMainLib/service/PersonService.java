@@ -20,12 +20,20 @@ public class PersonService {
         return ResponseEntity.ok(personRepo.save(person));
     }
 
-    public ResponseEntity delete(int id){
-        Optional<Person> personTmp = personRepo.findById(id);
-        if (personTmp.isEmpty()){
-            return ResponseEntity.badRequest().build();
+    public Optional<Person> getOnePerson(Integer id) {
+        Optional<Person> optionalPersonTmp = personRepo.findById(id);
+        if(optionalPersonTmp.isPresent()) {
+            return personRepo.findById(id);
+        } else {
+            return Optional.empty();
         }
-            return ResponseEntity.ok().build();
+    }
+
+    public void delete(int id){
+        Optional<Person> optionalPersonTmp = personRepo.findById(id);
+        if (optionalPersonTmp.isPresent()) {
+            personRepo.deleteById(id);
+        }
     }
 
     public ResponseEntity<Person> deleteShow(int id){
@@ -37,4 +45,5 @@ public class PersonService {
             return ResponseEntity.ok(tmp.get());
         }
     }
+
 }
