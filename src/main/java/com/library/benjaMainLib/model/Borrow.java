@@ -1,18 +1,18 @@
 package com.library.benjaMainLib.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity//annotation that makes this class be able to communicate with the sql database via jpa
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "borrow")
 public class Borrow {
 
     @Id
@@ -26,7 +26,8 @@ public class Borrow {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private Date borrowdate;
+    @Column(updatable = false)
+    @CreationTimestamp
+    private LocalDateTime borrowdate;
 
 }

@@ -50,7 +50,7 @@ public class CustomerController implements BookController, PersonController {
         return borrowService.booking(borrow);
     }
 
-    @DeleteMapping("/return")
+    @DeleteMapping("/return/{id}")
     public ResponseEntity<Borrow> bookReturn(@PathVariable Integer id){
         return borrowService.returnBook(id);
     }
