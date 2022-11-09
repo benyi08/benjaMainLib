@@ -4,71 +4,72 @@ import com.library.benjaMainLib.model.Book;
 import com.library.benjaMainLib.model.Borrow;
 import com.library.benjaMainLib.repository.BookRepo;
 import com.library.benjaMainLib.repository.BorrowRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
+@RequiredArgsConstructor
 public class BorrowService {
 
-    @Autowired
-    BorrowRepo borrowRepo;
+    private final BorrowRepo borrowRepo;
+    private final BookRepo bookRepo;
 
-    @Autowired
-    BookRepo bookRepo;
-
-    public Iterable<Borrow> getAllBorrows() { return borrowRepo.findAll(); }
-
-    public Optional<Borrow> getOneBorrow(Integer id) {
-        if (borrowRepo.findById(id).isEmpty()) {
-            return Optional.empty();
-        } else {
-            return borrowRepo.findById(id);
-        }
+    public List<Borrow> getAllBorrows() {
+        return borrowRepo.findAll();
     }
 
-    public ResponseEntity<Borrow> booking(Borrow borrow){
-
-        Optional<Integer> bookId = getBookIdByName(borrow.getTitle());
-        if(bookId.isPresent() && ! bookRepo.findById(bookId.get()).get().isIsborrowed() ){
-            Book book = bookRepo.findById(bookId.get()).get();
+    public Optional<Borrow> booking(Borrow borrow){
+        Optional<Book> possibleBook = getBookByName(borrow.getTitle());
+        if(possibleBook.isPresent() && ! possibleBook.get().isIsborrowed() ){
+            Book book = possibleBook.get();
             book.setIsborrowed(true);
             bookRepo.save(book);
 
             borrow.setBorrowdate(LocalDateTime.now());
-            return ResponseEntity.ok(borrowRepo.save(borrow));
+            sendNotificationWhenBookOverdue();
+            borrowRepo.save(borrow);
+            return Optional.of(borrow);
+        } else {
+            return Optional.empty();
         }
-        return ResponseEntity.badRequest().build();
     }
 
-    public ResponseEntity<Borrow> returnBook(Integer id){
+    private final int twoWeeksInSeconds = 1209600;
 
+    @Scheduled(fixedRate = twoWeeksInSeconds)
+    public void sendNotificationWhenBookOverdue(){
+        Logger logger = Logger.getLogger(BorrowService.class.getName());
+        logger.log(Level.WARNING, "The 3 week of borrow limit is expired. Please return the borrowed book asap!");
+    }
+
+    public ResponseEntity<Borrow> withDrawBorrow(Integer id){
         Optional<Borrow> possibleBorrow = borrowRepo.findById(id);
         if( possibleBorrow.isPresent() ){
-            Book book = bookRepo.findById(getBookIdByName(possibleBorrow.get().getTitle()).get()).get();
+            Book book = getBookByName(possibleBorrow.get().getTitle()).get();
             book.setIsborrowed(false);
             bookRepo.save(book);
 
             borrowRepo.deleteById(id);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
-    public Optional<Integer> getBookIdByName(String bookName){
-        List<Book> bookList = new ArrayList<>(bookRepo.findAll());
-        for(Book book : bookList){
-            if (book.getTitle().equals(bookName)){
-                return Optional.of(book.getId());
-            }
-        }
-        return Optional.empty();
+    public Optional<Book> getBookByName(String bookName){
+        return bookRepo.findAll()
+                .stream()
+                .filter(book -> book.getTitle().equals(bookName))
+                .findFirst();
     }
+
 
 }

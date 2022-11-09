@@ -16,7 +16,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    private Integer id;
+    private int id;
 
     @Column(nullable = false)
     private String title;
@@ -28,7 +28,7 @@ public class Book {
     private Date publishdate;//no upper cases
 
     @Column(nullable = false)
-    private String pages;
+    private int pages;
 
     @Column(nullable = false)
     private boolean isborrowed;//no upper cases
